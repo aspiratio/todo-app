@@ -11,7 +11,12 @@ export default function Home() {
 
   const onClickAddTask = (newTaskContent: string) => {
     setTasks([...tasks, { content: newTaskContent, status: 'todo' }])
-    console.log(tasks)
+    setNewTaskContent('')
+  }
+
+  const onClickChangeStatus = (nextStatus: Status, index: number) => {
+    const changedTask = { content: tasks[index].content, status: nextStatus }
+    setTasks(tasks.map((task, i) => (i === index ? changedTask : task)))
   }
 
   return (
@@ -22,9 +27,21 @@ export default function Home() {
         タスクを追加
       </button>
       <h2>未実施</h2>
-      <TasksView tasks={tasks} stateToDisplay={'todo'} />
+      <TasksView
+        tasks={tasks}
+        stateToDisplay={'todo'}
+        buttonText={'進行中へ'}
+        nextStatus={'progress'}
+        onClickChangeStatus={onClickChangeStatus}
+      />
       <h2>進行中</h2>
-      <TasksView tasks={tasks} stateToDisplay={'progress'} />
+      <TasksView
+        tasks={tasks}
+        stateToDisplay={'progress'}
+        buttonText={'完了へ'}
+        nextStatus={'done'}
+        onClickChangeStatus={onClickChangeStatus}
+      />
       <h2>完了</h2>
       <TasksView tasks={tasks} stateToDisplay={'done'} />
     </div>
