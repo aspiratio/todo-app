@@ -6,6 +6,7 @@ type Props = {
   buttonText?: string
   nextStatus?: Status
   onClickChangeStatus?: (nextStatus: Status, index: number) => void
+  onClickDelete: (index: number) => void
 }
 
 export const TasksView = ({
@@ -14,6 +15,7 @@ export const TasksView = ({
   buttonText,
   nextStatus,
   onClickChangeStatus,
+  onClickDelete,
 }: Props) => {
   return (
     <>
@@ -26,6 +28,7 @@ export const TasksView = ({
                 nextStatus={nextStatus}
                 buttonText={buttonText}
                 onClickChangeStatus={onClickChangeStatus}
+                onClickDelete={onClickDelete}
                 index={i}
               />
             </li>

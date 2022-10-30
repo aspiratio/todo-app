@@ -19,6 +19,10 @@ export default function Home() {
     setTasks(tasks.map((task, i) => (i === index ? changedTask : task)))
   }
 
+  const onClickDelete = (index: number) => {
+    setTasks(tasks.filter((_, i) => i !== index))
+  }
+
   return (
     <div>
       <h1>TODO APP</h1>
@@ -33,6 +37,7 @@ export default function Home() {
         buttonText={'進行中へ'}
         nextStatus={'progress'}
         onClickChangeStatus={onClickChangeStatus}
+        onClickDelete={onClickDelete}
       />
       <h2>進行中</h2>
       <TasksView
@@ -41,9 +46,14 @@ export default function Home() {
         buttonText={'完了へ'}
         nextStatus={'done'}
         onClickChangeStatus={onClickChangeStatus}
+        onClickDelete={onClickDelete}
       />
       <h2>完了</h2>
-      <TasksView tasks={tasks} stateToDisplay={'done'} />
+      <TasksView
+        tasks={tasks}
+        stateToDisplay={'done'}
+        onClickDelete={onClickDelete}
+      />
     </div>
   )
 }

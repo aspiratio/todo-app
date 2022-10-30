@@ -2,6 +2,7 @@ type Props = {
   buttonText?: string
   nextStatus?: Status
   onClickChangeStatus?: (nextStatus: Status, index: number) => void
+  onClickDelete: (index: number) => void
   index: number
 }
 
@@ -9,6 +10,7 @@ export const TaskButtons = ({
   buttonText,
   nextStatus,
   onClickChangeStatus,
+  onClickDelete,
   index,
 }: Props) => {
   return (
@@ -18,6 +20,7 @@ export const TaskButtons = ({
           {buttonText}
         </button>
       )}
+      <button onClick={() => onClickDelete(index)}>削除</button>
     </>
   )
 }
