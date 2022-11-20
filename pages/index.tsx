@@ -1,7 +1,8 @@
+import { NextPage } from 'next'
 import { ChangeEvent, useState } from 'react'
 import { TasksView } from '../features/components/TasksView'
 
-export default function Home() {
+const Home: NextPage = () => {
   const [newTaskContent, setNewTaskContent] = useState<string>('')
   const [tasks, setTasks] = useState<Array<Task>>([])
 
@@ -57,3 +58,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home
