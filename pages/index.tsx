@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { NextPage } from 'next'
 import { ChangeEvent, useState } from 'react'
 import { TasksView } from '../features/components/TasksView'
@@ -5,14 +6,19 @@ import { TasksView } from '../features/components/TasksView'
 const Home: NextPage = () => {
   const [newTaskContent, setNewTaskContent] = useState<string>('')
   const [tasks, setTasks] = useState<Array<Task>>([])
+  const [result, setResult] = useState<String>('')
 
   const onChangeNewTask = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTaskContent(event.target.value)
   }
 
-  const onClickAddTask = (newTaskContent: string) => {
+  const onClickAddTask = async (newTaskContent: string) => {
     setTasks([...tasks, { content: newTaskContent, status: 'todo' }])
     setNewTaskContent('')
+    const res = await axios.post('http://127.0.0.1:5000/create', {
+      body: JSON.stringify({ url: newTaskContent }),
+    })
+    setResult(res.data.url)
   }
 
   const onClickChangeStatus = (nextStatus: Status, index: number) => {
