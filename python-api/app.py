@@ -34,9 +34,12 @@ class Url(db.Model):
     url = db.Column(db.String(4096), unique=True, nullable=False)
 
 
-@app.route("/get/<id>")
+@app.route("/get/<int:id>")
 def get_url(id):
-    return jsonify({"url": "https://example.com"})
+    u = Url.query.get(id)
+    if not u:
+        return jsonify({"url": "http://127.0.0.1:3000/"}), 200
+    return jsonify({"url": u.url})
 
 
 @app.route("/create", methods=["POST"])
@@ -47,7 +50,8 @@ def create_url():
 
 if __name__ == "__main__":
     # DBのversion管理をしなくて良いように変更を加えるたびにdbをdropして作り直すようにする
-    db.drop_all()
-    db.create_all()
-    db.session.commit()
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+        db.session.commit()
     app.run(debug=True, host="0.0.0.0", port=5000)
