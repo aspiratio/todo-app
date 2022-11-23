@@ -47,3 +47,9 @@ next-env.d.ts
 pyvenv.cfg
 .venv
 pip-selfcheck.json
+
+# db
+*.db
+
+# python
+*/__pycache__
