@@ -12,13 +12,19 @@ app = Flask(__name__, instance_relative_config=True)  # アプリの作成
 
 app.config.from_mapping(None)  # アプリの設定  # 今は何も無い
 
+# 本来はCORSというセキュリティ対策のため、'http://127.0.0.1:3000/'からのリクエストを'http://127.0.0.1:5000/'が受けることはできない
+# そのため特定のURLとポートを限定して穴あけを行う
+# ここではワイルドカードで全て許可しているが、外部に公開するようなWebアプリでこの設定は危険
+cors = CORS(app, responses={r"/*": {"origins": "*"}})
+
 
 @app.route("/get/<id>")
 def get_url(id):
     return jsonify({"url": "https://example.com"})
 
 
-@app.route("/create")
+@app.route("/create", methods=["POST"])
+@cross_origin()
 def create_url():
     return jsonify({"url": "https://exmaple.com"})
 
