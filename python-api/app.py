@@ -45,7 +45,17 @@ def get_url(id):
 @app.route("/create", methods=["POST"])
 @cross_origin()
 def create_url():
-    return jsonify({"url": "https://exmaple.com"})
+    url = json.loads(json.loads(request.data.decode("utf-8"))["body"])["url"]
+    if not url:
+        return jsonify({"url": "oh"})
+    if Url.query.filter_by(url=url).first():
+        return jsonify(
+            {"url": "127.0.0.1:3000/" + str(Url.query.filter_by(url=url).first().id)}
+        )
+    u = Url(url=url)
+    db.session.add(u)
+    db.session.commit()
+    return jsonify({"url": "127.0.0.1:3000/" + str(u.id)})
 
 
 if __name__ == "__main__":
