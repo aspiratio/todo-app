@@ -46,12 +46,15 @@ def get_url(id):
 @cross_origin()
 def create_url():
     url = json.loads(json.loads(request.data.decode("utf-8"))["body"])["url"]
+    # 早期リターン：フォームが空欄のまま送信された場合
     if not url:
         return jsonify({"url": "oh"})
+    # 早期リターン：送信されたURLが既に登録済みだった場合→その登録idのURLを返す
     if Url.query.filter_by(url=url).first():
         return jsonify(
             {"url": "127.0.0.1:3000/" + str(Url.query.filter_by(url=url).first().id)}
         )
+    # フォームの値をDBに登録し、idのURLを返す
     u = Url(url=url)
     db.session.add(u)
     db.session.commit()
@@ -59,7 +62,7 @@ def create_url():
 
 
 if __name__ == "__main__":
-    # DBのversion管理をしなくて良いように変更を加えるたびにdbをdropして作り直すようにする
+    # DBのversion管理をしなくて良いように(スキーマとかを簡単にいじれるように)変更を加えるたびにdbをdropして作り直すようにする
     with app.app_context():
         db.drop_all()
         db.create_all()
