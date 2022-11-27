@@ -16,7 +16,7 @@ const Home: NextPage = () => {
     setTasks([...tasks, { content: newTaskContent, status: 'todo' }])
     setNewTaskContent('')
     const res = await axios.post('http://127.0.0.1:5000/create', {
-      body: JSON.stringify({ url: newTaskContent }),
+      body: JSON.stringify({ content: newTaskContent, status: 'todo' }),
     })
     setResult(res.data.url)
   }
