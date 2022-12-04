@@ -1,3 +1,4 @@
+import { Status, Task } from '../../@types/global'
 import { TaskButtons } from './TaskButtons'
 
 type Props = {

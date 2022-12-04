@@ -1,29 +1,46 @@
 import axios from 'axios'
 import { NextPage } from 'next'
 import { ChangeEvent, useState } from 'react'
+import { Status, Task } from '../@types/global'
 import { TasksView } from '../features/components/TasksView'
 
 const Home: NextPage = () => {
   const [newTaskContent, setNewTaskContent] = useState<string>('')
   const [tasks, setTasks] = useState<Array<Task>>([])
-  const [result, setResult] = useState<String>('')
 
   const onChangeNewTask = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTaskContent(event.target.value)
   }
 
   const onClickAddTask = async (newTaskContent: string) => {
-    setTasks([...tasks, { content: newTaskContent, status: 'todo' }])
-    setNewTaskContent('')
-    const res = await axios.post('http://127.0.0.1:5000/create', {
-      body: JSON.stringify({ content: newTaskContent, status: 'todo' }),
-    })
-    setResult(res.data.url)
+    try {
+      const res = await axios.post('http://127.0.0.1:5000/create', {
+        body: JSON.stringify({ content: newTaskContent, status: 'todo' }),
+      })
+      setTasks([
+        ...tasks,
+        { id: res.data.id, content: newTaskContent, status: 'todo' },
+      ])
+      setNewTaskContent('')
+    } catch {
+      alert('エラーが発生しました。もう一度お試しください')
+    }
   }
 
-  const onClickChangeStatus = (nextStatus: Status, index: number) => {
-    const changedTask = { content: tasks[index].content, status: nextStatus }
-    setTasks(tasks.map((task, i) => (i === index ? changedTask : task)))
+  const onClickChangeStatus = async (nextStatus: Status, index: number) => {
+    const changedTask = {
+      id: tasks[index].id,
+      content: tasks[index].content,
+      status: nextStatus,
+    }
+    try {
+      await axios.post('http://127.0.0.1:5000/update', {
+        body: JSON.stringify(changedTask),
+      })
+      setTasks(tasks.map((task, i) => (i === index ? changedTask : task)))
+    } catch {
+      alert('エラーが発生しました。もう一度お試しください')
+    }
   }
 
   const onClickDelete = (index: number) => {

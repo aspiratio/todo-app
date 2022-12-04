@@ -51,6 +51,20 @@ def create_task():
     task = Task(content=content, status=status)
     db.session.add(task)
     db.session.commit()
+    return jsonify({"id": task.id})
+
+
+@app.route("/update", methods=["POST"])
+@cross_origin()
+def update_status():
+    request_body = json.loads(request.data.decode("utf-8"))["body"]
+    id = json.loads(request_body)["id"]
+    status = json.loads(request_body)["status"]
+    task = Task.query.get(id)
+    if not task:
+        return
+    task.status = status
+    db.session.commit()
     return jsonify({"status": "ok"})
 
 
