@@ -1,3 +1,5 @@
+import { Status } from '../../@types/global'
+
 type Props = {
   buttonText?: string
   nextStatus?: Status
