@@ -43,8 +43,14 @@ const Home: NextPage = () => {
     }
   }
 
-  const onClickDelete = (index: number) => {
-    setTasks(tasks.filter((_, i) => i !== index))
+  const onClickDelete = async (index: number) => {
+    const taskId = tasks[index].id
+    try {
+      await axios.delete(`http://127.0.0.1:5000/delete/${taskId}`)
+      setTasks(tasks.filter((_, i) => i !== index))
+    } catch {
+      alert('エラーが発生しました。もう一度お試しください')
+    }
   }
 
   return (

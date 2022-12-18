@@ -68,6 +68,17 @@ def update_status():
     return jsonify({"status": "ok"})
 
 
+@app.route("/delete/<int:id>", methods=["DELETE"])
+@cross_origin()
+def delete_task(id):
+    task = Task.query.get(id)
+    if not task:
+        return
+    db.session.delete(task)
+    db.session.commit()
+    return jsonify({"status": "ok"})
+
+
 if __name__ == "__main__":
     # DBのversion管理をしなくて良いように(スキーマとかを簡単にいじれるように)変更を加えるたびにdbをdropして作り直すようにする
     with app.app_context():
