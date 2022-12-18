@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { NextPage } from 'next'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Status, Task } from '../@types/global'
 import { TasksView } from '../features/components/TasksView'
 
@@ -11,6 +11,19 @@ const Home: NextPage = () => {
   const onChangeNewTask = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTaskContent(event.target.value)
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get('http://127.0.0.1:5000/get')
+        console.log(res)
+        setTasks(res.data.tasks)
+      } catch {
+        alert('通信エラー')
+      }
+    }
+    fetchData()
+  }, [])
 
   const onClickAddTask = async (newTaskContent: string) => {
     try {

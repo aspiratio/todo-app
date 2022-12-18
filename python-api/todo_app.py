@@ -37,9 +37,22 @@ class Task(db.Model):
     status = db.Column(db.String(4096), unique=False, nullable=False)
 
 
+def convert_into_json(tasks):
+    return {"id": tasks.id, "content": tasks.content, "status": tasks.status}
+
+
 @app.before_first_request
 def init():
     db.create_all()
+
+
+@app.route("/get", methods=["GET"])
+def get_tasks():
+    tasks = Task.query.all()
+    res = []
+    for task in tasks:
+        res.append(convert_into_json(task))
+    return jsonify({"tasks": res})
 
 
 @app.route("/create", methods=["POST"])
